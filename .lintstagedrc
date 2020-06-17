@@ -1,0 +1,6 @@
+{
+    "src/**/*.{ts,tsx,js,css}": [
+        "tslint --fix -p tsconfig.json",
+        "prettier --write"
+    ]
+}

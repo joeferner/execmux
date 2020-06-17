@@ -1,0 +1,53 @@
+{
+  "name": "execmux",
+  "version": "0.0.1",
+  "description": "Execute multiple commands at once in a single window",
+  "main": "dist/index.js",
+  "scripts": {
+    "clean": "rm -rf node_modules dist",
+    "build": "tsc && echo 'DONE'",
+    "build:watch": "tsc --watch",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "lint": "tslint --fix -p tsconfig.json",
+    "lint-staged": "lint-staged",
+    "pre-commit": "npm run format && npm run lint-staged",
+    "pre-push": "npm run build && npm run test",
+    "prepare": "rm -rf dist && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/joeferner/execmux.git"
+  },
+  "keywords": [
+    "exec",
+    "spawn",
+    "mux",
+    "terminal",
+    "multiple"
+  ],
+  "author": "Joe Ferner <joe@fernsroth.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/joeferner/execmux/issues"
+  },
+  "homepage": "https://github.com/joeferner/execmux#readme",
+  "devDependencies": {
+    "@types/yargs": "^15.0.5",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
+    "prettier": "^2.0.5",
+    "ts-node": "^8.10.2",
+    "tslint": "^6.1.2",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.9.5"
+  },
+  "dependencies": {
+    "yargs": "^15.3.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run pre-commit",
+      "pre-push": "npm run pre-push"
+    }
+  }
+}
