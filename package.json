@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "clean": "rm -rf node_modules dist",
-    "build": "tsc && echo 'DONE'",
+    "build": "typescript-json-schema --strictNullChecks --required --out src/config.schema.json ./tsconfig.json Config && tsc",
     "build:watch": "tsc --watch",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "tslint --fix -p tsconfig.json",
@@ -32,6 +32,9 @@
   },
   "homepage": "https://github.com/joeferner/execmux#readme",
   "devDependencies": {
+    "@types/ajv": "^1.0.0",
+    "@types/colors": "^1.2.1",
+    "@types/node": "^14.0.13",
     "@types/yargs": "^15.0.5",
     "husky": "^4.2.5",
     "lint-staged": "^10.2.11",
@@ -39,9 +42,12 @@
     "ts-node": "^8.10.2",
     "tslint": "^6.1.2",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.9.5"
+    "typescript": "^3.9.5",
+    "typescript-json-schema": "^0.42.0"
   },
   "dependencies": {
+    "ajv": "^6.12.2",
+    "colors": "^1.4.0",
     "yargs": "^15.3.1"
   },
   "husky": {

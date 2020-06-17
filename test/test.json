@@ -1,0 +1,27 @@
+{
+  "commands": [
+    {
+      "title": "ls and exit",
+      "command": [
+        "ls",
+        "/"
+      ]
+    },
+    {
+      "title": "periodic output",
+      "command": [
+        "./periodic-output.sh"
+      ]
+    },
+    {
+      "title": "bad process",
+      "command": [
+        "./missing-command.sh"
+      ]
+    },
+    {
+      "cwd": "../",
+      "command": "npm run build:watch"
+    }
+  ]
+}
