@@ -16,7 +16,7 @@
                         }
                     ]
                 },
-                "cwd": {
+                "dir": {
                     "type": "string"
                 },
                 "title": {

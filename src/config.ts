@@ -5,7 +5,7 @@ import { findFile } from './findFile';
 export interface ConfigCommand {
     title?: string;
     command: string | string[];
-    cwd?: string;
+    dir?: string;
 }
 
 export interface Config {
