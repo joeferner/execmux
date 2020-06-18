@@ -113,6 +113,7 @@ export class Ui {
         console.log(':k<process>    - kill the process');
         console.log(':h<process>    - shows the most recent output from the process');
         console.log('Ctrl+b, Ctrl+b - exit focus');
+        console.log('Ctrl+c         - exit the current focused process, or exit all processes if non-are focused');
     }
 
     private handleRestartCommand(processes: Process[]) {

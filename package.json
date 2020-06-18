@@ -1,8 +1,11 @@
 {
   "name": "execmux",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Execute multiple commands at once in a single window",
   "main": "dist/index.js",
+  "bin": {
+    "execmux": "dist/index.js"
+  },
   "scripts": {
     "clean": "rm -rf node_modules dist",
     "build": "typescript-json-schema --strictNullChecks --required --out src/config.schema.json ./tsconfig.json Config && tsc",
