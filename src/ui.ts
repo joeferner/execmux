@@ -4,12 +4,16 @@ import colors from 'colors';
 const KEY_CTRL_B = '\u0002';
 const KEY_CTRL_C = '\u0003';
 const KEY_BACKSPACE = 127;
+const KEY_UP = '\u001b\u005b\u0041';
+const KEY_DOWN = '\u001b\u005b\u0042';
 
 export class Ui {
     exitFocusCount: number = 0;
     focusProcessIndex: number | undefined;
     command: string = '';
     commandMode: boolean = false;
+    commandHistoryIndex: number = 0;
+    commandHistory: string[] = [];
 
     startUserInterface(processes: Process[]) {
         const stdin = process.stdin;
@@ -63,7 +67,35 @@ export class Ui {
             for (const p of processes) {
                 p.process?.kill();
             }
-        } else if (this.commandMode) {
+            return;
+        }
+
+        if (!this.commandMode) {
+            if (s === '?') {
+                this.handleHelpCommand();
+                return;
+            }
+
+            if (s === 'l') {
+                this.handleListProcessesCommand(processes);
+                return;
+            }
+
+            if (s === ':') {
+                this.commandMode = true;
+                this.command = '';
+                this.commandHistoryIndex = this.commandHistory.length;
+                process.stdout.write(key);
+                return;
+            }
+
+            if (s === KEY_UP || s === KEY_DOWN) {
+                this.commandHistoryIndex = this.commandHistory.length;
+                this.commandMode = true;
+            }
+        }
+
+        if (this.commandMode) {
             if (key.charCodeAt(0) === KEY_BACKSPACE) {
                 if (this.command.length > 0) {
                     this.command = this.command.substr(0, this.command.length - 1);
@@ -71,7 +103,31 @@ export class Ui {
                     process.stdout.cursorTo(0);
                     process.stdout.write(`:${this.command}`);
                 }
-            } else if (s === '\r') {
+                return;
+            }
+
+            if (s === KEY_UP || s === KEY_DOWN) {
+                if (this.commandHistory.length > 0) {
+                    if (s === KEY_UP) {
+                        this.commandHistoryIndex--;
+                        if (this.commandHistoryIndex < 0) {
+                            this.commandHistoryIndex = 0;
+                        }
+                    } else if (s === KEY_DOWN) {
+                        this.commandHistoryIndex++;
+                        if (this.commandHistoryIndex > this.commandHistory.length) {
+                            this.commandHistoryIndex = this.commandHistory.length;
+                        }
+                    }
+                    this.command = this.commandHistory[this.commandHistoryIndex] || '';
+                }
+                process.stdout.clearLine(0);
+                process.stdout.cursorTo(0);
+                process.stdout.write(`:${this.command}`);
+                return;
+            }
+
+            if (s === '\r') {
                 process.stdout.write('\n');
                 if (this.command === 'l' || this.command === 'list') {
                     this.handleListProcessesCommand(processes);
@@ -87,23 +143,17 @@ export class Ui {
                     console.error(`invalid command "${this.command}"`);
                 }
                 this.commandMode = false;
-            } else {
-                this.command += s;
-                process.stdout.write(key);
-            }
-        } else {
-            if (s === '?') {
-                this.handleHelpCommand();
-            } else if (s === 'l') {
-                this.handleListProcessesCommand(processes);
-            } else if (s === ':') {
-                this.commandMode = true;
+                this.commandHistory.push(this.command);
                 this.command = '';
-                process.stdout.write(key);
-            } else {
-                process.stdout.write(key);
+                return;
             }
+
+            this.command += s;
+            process.stdout.write(key);
+            return;
         }
+
+        process.stdout.write(key);
     }
 
     private handleHelpCommand() {
