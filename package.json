@@ -4,7 +4,7 @@
   "description": "Execute multiple commands at once in a single window",
   "main": "dist/index.js",
   "bin": {
-    "execmux": "dist/index.js"
+    "execmux": "bin/execmux"
   },
   "scripts": {
     "clean": "rm -rf node_modules dist",
