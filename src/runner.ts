@@ -1,5 +1,6 @@
 import { Config, ConfigCommand } from './config';
-import { ChildProcessWithoutNullStreams, spawn, SpawnOptionsWithoutStdio } from 'child_process';
+import spawn from 'cross-spawn';
+import child_process, { SpawnOptionsWithoutStdio } from 'child_process';
 import { COLORS } from './colors';
 import colors, { Color } from 'colors';
 import path from 'path';
@@ -12,7 +13,7 @@ export interface Process extends ConfigCommand {
     title: string;
     running: boolean;
     history: string[];
-    process?: ChildProcessWithoutNullStreams;
+    process?: child_process.ChildProcess;
     promise?: Promise<void>;
     exitCode?: number;
 }
@@ -68,10 +69,10 @@ export function startCommandProcess(p: Process) {
             const spawnedProcess = spawnCommand(p);
             p.process = spawnedProcess;
             p.running = true;
-            spawnedProcess.stdout.on('data', (data) => {
+            spawnedProcess.stdout?.on('data', (data) => {
                 output(p, data);
             });
-            spawnedProcess.stderr.on('data', (data) => {
+            spawnedProcess.stderr?.on('data', (data) => {
                 output(p, data);
             });
             spawnedProcess.on('error', (err) => {
@@ -90,7 +91,7 @@ export function startCommandProcess(p: Process) {
     });
 }
 
-function spawnCommand(command: ConfigCommand): ChildProcessWithoutNullStreams {
+function spawnCommand(command: ConfigCommand): child_process.ChildProcess {
     const options: SpawnOptionsWithoutStdio = {
         cwd: getCommandWorkingDirectory(command),
     };
