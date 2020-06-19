@@ -1,6 +1,6 @@
 {
   "name": "execmux",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Execute multiple commands at once in a single window",
   "main": "dist/index.js",
   "bin": {
